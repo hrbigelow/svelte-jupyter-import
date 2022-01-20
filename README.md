@@ -44,7 +44,7 @@ components.  This tool uses Svelte (a Javascript web components system, also
 used by Distill.pub), allowing you to add arbitrary Javascript components into
 your article using a small construct:
 
-${<slot name='figure1' />}$
+```${<slot name='figure1' />}$```
 
 where 'figure1' is the name of a Svelte Component.  An example can be found at
 https://github.com/hrbigelow/kernel-methods.
