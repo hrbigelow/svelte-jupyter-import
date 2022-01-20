@@ -104,7 +104,7 @@ const verbatim = {
   },
 
   renderer(token) {
-    console.log(`in verbatim, got ${token.text}`);
+    // console.log(`in verbatim, got ${token.text}`);
     return token.text;
   }
 };

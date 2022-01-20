@@ -115,19 +115,6 @@ export default [
     watch: {
       clearScreen: false
     }
-  },
-  {
-    input: 'src/full.js',
-    output: {
-      sourcemap: true,
-      format: 'iife',
-      name: 'full',
-      file: 'public/build/full_plot_bundle.js'
-    },
-    plugins: defaultPlugins,
-    watch: {
-      clearScreen: false
-    }
   }
 ];
 
