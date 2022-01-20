@@ -4,9 +4,15 @@ import resolve from '@rollup/plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import css from 'rollup-plugin-css-only';
-import marked from 'marked';
+import path from 'path';
 
-import { dmath, dmath_block, quote_dmath_html, macro_convert } from './src/rollup_preprocess.js';
+import { pre_md, pre_sv } from './src/preprocess.js';
+
+var debug_file = process.argv.find((arg) => arg.startsWith('--debug-file'));
+if (debug_file)
+  debug_file = debug_file.split('=')[1]
+
+
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -31,7 +37,15 @@ function serve() {
 	};
 }
 
-marked.use({ extensions: [dmath, dmath_block] });
+function debug_message(file, content, note) {
+  console.log(`
+Processing ${file} (${note})
+
+---------------------------
+${content} 
+---------------------------
+`);
+}
 
 const defaultPlugins = [
   svelte({
@@ -39,25 +53,17 @@ const defaultPlugins = [
     preprocess: [
       { 
         markup: ({ content, filename }) => {
-          // console.log(`Processing ${filename}\n\n\n`);
+          if (path.basename(filename) == debug_file)
+            debug_message(filename, content, 'before');
+
           if (filename.slice(-2) == 'md') {
-            content = macro_convert(content);
-            // console.log('After macro_convert');
-            // console.log(content);
-
-            content = marked(content);
-            // console.log('After marked');
-            // console.log(content);
-
+            content = pre_md(content);
           } else {
-            content = quote_dmath_html(content);
-            /*
-            if (filename == 'src/KernelHeatmap.svelte') { 
-              console.log('After quote_dmath_html');
-              console.log(content);
-            }
-            */
+            content = pre_sv(content);
           }
+
+          if (path.basename(filename) == debug_file)
+            debug_message(filename, content, 'after');
 
           return { code: content };
         }
@@ -104,6 +110,19 @@ export default [
       format: 'iife',
       name: 'app',
       file: 'public/build/bundle.js'
+    },
+    plugins: defaultPlugins,
+    watch: {
+      clearScreen: false
+    }
+  },
+  {
+    input: 'src/full.js',
+    output: {
+      sourcemap: true,
+      format: 'iife',
+      name: 'full',
+      file: 'public/build/full_plot_bundle.js'
     },
     plugins: defaultPlugins,
     watch: {
