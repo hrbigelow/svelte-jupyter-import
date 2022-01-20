@@ -10,8 +10,8 @@ $ npm run dev
 $ go to localhost:port as instructed
 ```
 
-This compiles a .md file ./src/jupyter_nbconvert_markdown.md provided in the
-repo into a Svelte component and webpage, with distill.js used to render LateX.
+This compiles a .md file ./src/example.md provided in the
+repo into a Svelte component and webpage, with Katex used to render the LateX 
 
 To provide your own markdown file:
 
@@ -19,32 +19,8 @@ To provide your own markdown file:
 $ jupyter nbconvert --to markdown my_notebook.ipynb --output my_notebook.md
 $ cp my_notebook.md svelte-jupyter-import/src/
 # Edit svelte-jupyter-import/src/App.svelte and replace the line:
-# import JupyterContent from './jupyter_nbconvert_markdown.md';
+# import JupyterContent from './example.md';
 # with:
 # import JupyterContent from './my_notebook.md'; 
 ```
-
-## How it works
-
-The technique shown in [Marked.js Custom Extensions](https://marked.js.org/using_pro#extensions)
-is used in src/rollup_preprocess.js.  The occurrences of `$ ... $` and:
-
-```
-$
-\begin{aligned}
-...
-\end{aligned}
-$
-```
-
-are replaced with `<d-math> ... </d-math>` blocks, and the contents escaped appropriately for Svelte
-to process.  The remainder of the .md file contents are parsed normally with marked.js to produce html.
-
-Then, the Svelte compiler compiles all of it to Javascript, and bundles it as a component which
-you can then import.  The `<d-math>` tags are tags understood by distill.js, which is a handy
-typesetting library based on katex.js for math.  Distill.js also has good formatting for figures.
-
-
-
-
 
