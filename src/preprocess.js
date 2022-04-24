@@ -1,4 +1,4 @@
-import marked from 'marked';
+import { marked } from 'marked';
 import katex from 'katex';
 // import { node_parser } from 'node-html-parser';
 import { parse as html_parse } from 'node-html-parser';
