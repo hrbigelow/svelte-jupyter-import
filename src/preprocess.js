@@ -20,18 +20,23 @@ const math_block = {
   name: 'math_block',
   level: 'block',
   // returns position of next match, or undefined if no match
-  start(src) { return src.match(/\$\$/)?.index; },
+  //start(src) { return src.match(/\$\$/)?.index; },
+  start(src) { return src.match(/(\\begin{equation}|\$\$)/)?.index; },
   tokenizer(src, tokens) {
     // rule matches at beginning of string.  this must mean
     // that the tokenizer is called with different slices of the source
-    const rule = /^\$\$(.+?)\$\$/s;
+    // const rule = /^\\begin{equation}(.+?)\\end{equation}|^\$\$(.+?)\$\$/s;
+    const eqn_rule = /^\\begin{equation}(?<latex1>.+?)\\end{equation}/
+    const dollar_rule = /^\$\$(?<latex2>.+?)\$\$/
+    const rule = RegExp(eqn_rule.source + '|' + dollar_rule.source, 's')
     const match = rule.exec(src); // returns a weird array/object hybrid thing 
-
+        
     if (match) {
+      // console.log(match)
       var token = {
         type: 'math_block',
         raw: match[0],
-        text: match[1]
+        text: match.groups.latex1 || match.groups.latex2
       };
       return token;
     }

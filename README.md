@@ -30,6 +30,60 @@ The workflow is a bit of a compromise.  Ideally, you will edit the article
 completely in Google Colab.  Then, once you are ready to convert it to HTML,
 save it as ipynb locally, and follow the steps above.
 
+## Math Block and Inline Math modes
+
+The Colab source will be interpreted as one of three types:  Markdown, Math
+block, and inline math.  Markdown is the default.  Math block mode is delimited
+either by the `\begin{equation}` and `\end{equation}` flanking the content on
+separte lines, or by `$$` flanking it on separate lines, as in:
+
+```
+\begin{equation}
+\begin{split}  
+\prod_{\substack{ i=1 \\ i=i \\ i \ne j}}
+\end{split}
+\end{equation}
+```
+
+or:
+
+```
+$$
+\begin{split}  
+\prod_{\substack{ i=1 \\ i=i \\ i \ne j}}
+\end{split}
+$$
+```
+
+
+Inline math is delimited by '$' as in:
+
+```
+What's the big deal about Einstein's equation $e = mc^2$?  Looks pretty easy to
+me!
+```
+
+Within Math block, you can have embedded text using the `mbox{...}` construct.
+Furthermore, the `\mbox{...}` can contain inline math, as in:
+
+```
+\begin{equation}
+\begin{split}  
+\prod_{\substack{ i=1 \\ i=i \\ i \ne j}} 
+\end{split} \\[1em]
+\mbox{some text within the math block, with inline math: $m_{rc} = a_{ri} * b_{ic}$}
+\end{equation}
+```
+
+## Non-standard Verbatim mode
+
+The delimiters `${ ... }$` cause this compiler to pass the contents through as
+verbatim HTML during the preprocessing phase.  Such delimiters aren't
+particularly useful for use in Colab directly, because Colab will interpret the
+whole thing inside the `$ ... $`, namely, the content `{ ... }`, as a LateX
+expression.  The verbatim consstruct should be used to hook in Svelte
+components, as explained below.
+
 ## More Detail
 
 Google Colab provides a very nice interactive interface for composing articles
