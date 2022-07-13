@@ -59,8 +59,8 @@ $$
 Inline math is delimited by '$' as in:
 
 ```
-What's the big deal about Einstein's equation $e = mc^2$?  Looks pretty easy to
-me!
+Einstein's equation $e = mc^2$ looks pretty easy to me.  You square $c$,
+multiply by $m$, what's the big deal?  
 ```
 
 Within Math block, you can have embedded text using the `mbox{...}` construct.
