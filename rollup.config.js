@@ -6,35 +6,34 @@ import { terser } from 'rollup-plugin-terser';
 import css from 'rollup-plugin-css-only';
 import path from 'path';
 
-import { pre_md, pre_sv } from './src/preprocess.js';
+import { preprocess_md } from './src/preprocess.js';
 
 var debug_file = process.argv.find((arg) => arg.startsWith('--debug-file'));
 if (debug_file)
   debug_file = debug_file.split('=')[1]
 
 
-
 const production = !process.env.ROLLUP_WATCH;
 
 function serve() {
-	let server;
+  let server;
 
-	function toExit() {
-		if (server) server.kill(0);
-	}
+  function toExit() {
+    if (server) server.kill(0);
+  }
 
-	return {
-		writeBundle() {
-			if (server) return;
-			server = require('child_process').spawn('npm', ['run', 'start', '--', '--dev'], {
-				stdio: ['ignore', 'inherit', 'inherit'],
-				shell: true
-			});
+  return {
+    writeBundle() {
+      if (server) return;
+      server = require('child_process').spawn('npm', ['run', 'start', '--', '--dev'], {
+        stdio: ['ignore', 'inherit', 'inherit'],
+        shell: true
+      });
 
-			process.on('SIGTERM', toExit);
-			process.on('exit', toExit);
-		}
-	};
+      process.on('SIGTERM', toExit);
+      process.on('exit', toExit);
+    }
+  };
 }
 
 function debug_message(file, content, note) {
@@ -50,6 +49,7 @@ ${content}
 const defaultPlugins = [
   svelte({
     extensions: ['.svelte', '.md'],
+    // see https://svelte.dev/docs#compile-time-svelte-preprocess
     preprocess: [
       { 
         markup: ({ content, filename }) => {
@@ -57,9 +57,9 @@ const defaultPlugins = [
             debug_message(filename, content, 'before');
 
           if (filename.slice(-2) == 'md') {
-            content = pre_md(content);
+            content = preprocess_md(content);
           } else {
-            content = pre_sv(content);
+            // content = pre_sv(content);
           }
 
           if (path.basename(filename) == debug_file)
@@ -104,12 +104,25 @@ const defaultPlugins = [
 
 export default [
   {
-    input: 'src/main.js',
+    input: 'src/editor.js',
     output: {
       sourcemap: true,
       format: 'iife',
       name: 'app',
-      file: 'public/build/bundle.js'
+      file: 'public/build/editor.js'
+    },
+    plugins: defaultPlugins,
+    watch: {
+      clearScreen: false
+    }
+  },
+  {
+    input: 'src/article.js',
+    output: {
+      sourcemap: true,
+      format: 'iife',
+      name: 'article',
+      file: 'public/build/article.js'
     },
     plugins: defaultPlugins,
     watch: {

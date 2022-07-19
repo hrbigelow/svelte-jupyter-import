@@ -1,9 +1,16 @@
 <script>
-  import JupyterContent from './example.md';
+  import { onMount } from 'svelte'
+  import JupyterContent from './test_substack.md'
+	import { mathJaxTypesetter } from './mathjax_call.js'
+
+  onMount(() => {
+    mathJaxTypesetter.typeset(window.body)
+  })
+
 </script>
 
 <article>
-  <h1 class='title'>My Article</h1>
+  <h1 class='title'>Article</h1>
   <JupyterContent/>
 </article>
 
@@ -75,4 +82,5 @@ article {
 }
 
 </style>
+
 
