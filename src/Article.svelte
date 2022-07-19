@@ -1,7 +1,7 @@
 <script>
   import { onMount } from 'svelte'
   import JupyterContent from './test_substack.md'
-	import { mathJaxTypesetter } from './mathjax_call.js'
+  import { mathJaxTypesetter } from './mathjax_call.js'
 
   onMount(() => {
     mathJaxTypesetter.typeset(window.body)

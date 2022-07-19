@@ -27,3 +27,10 @@
 
 <span id='target' bind:this={target} />
 
+
+<style>
+  span {
+    width: 100%;
+  }
+</style>
+
