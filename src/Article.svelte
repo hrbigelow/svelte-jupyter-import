@@ -1,15 +1,16 @@
 <script>
   import { onMount } from 'svelte'
-  import JupyterContent from './test_substack.md'
+  import JupyterContent from './example.md'
   import { mathJaxTypesetter } from './mathjax_call.js'
+  let article
 
   onMount(() => {
-    mathJaxTypesetter.typeset(window.body)
+    mathJaxTypesetter.typeset(article)
   })
 
 </script>
 
-<article>
+<article bind:this={article}>
   <h1 class='title'>Article</h1>
   <JupyterContent/>
 </article>
